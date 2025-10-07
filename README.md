@@ -11,7 +11,7 @@ Laboratório focado em conceitos fundamentais de **ponteiros em C**: manipulaç�
 - Manipular strings usando ponteiros
 
 ## Exercícios
-Consulte o arquivo `RevisaoPonteiros.md` para descrições completas dos exercícios.
+Consulte o arquivo `RevisaoPonteiros.pdf` para descrições completas dos exercícios.
 
 ## Compilação
 ```bash
