@@ -1,60 +1,96 @@
-# Lab 4: Sincronização de Threads
+# Lab 5: Revisão de Ponteiros
 
 ## Visão Geral
-Laboratório focado em mecanismos de sincronização para coordenação entre threads: **mutex**, **variáveis de condição** e **semáforos**.
+Laboratório focado em conceitos fundamentais de **ponteiros em C**: manipulação de memória, aritmética de ponteiros, alocação dinâmica e passagem por referência.
 
 ## Objetivos
-- Aplicar exclusão mútua com mutex em recursos compartilhados
-- Implementar comunicação entre threads com variáveis de condição
-- Resolver problemas clássicos: produtor-consumidor e leitores-escritores
-- Identificar e prevenir condições de corrida
+- Entender o conceito de ponteiros e endereços de memória
+- Praticar aritmética de ponteiros e manipulação de arrays
+- Implementar funções usando passagem por referência
+- Trabalhar com alocação dinâmica de memória (malloc/free)
+- Manipular strings usando ponteiros
 
-## Estrutura
-```
-lab4-syncthreads/
-├── src/                      # Códigos-fonte
-│   ├── ex1_contador_mutex.c    # Contador com mutex
-│   ├── ex2_pedidos_prodcons.c  # Produtor-consumidor
-│   └── ex3_cache_leitores_escritores.c # Leitores-escritores
-├── docs/                     # Documentação
-│   └── sync_reference.md    # Referência rápida de sincronização
-├── EXERCICIOS.md            # Descrição detalhada dos exercícios
-└── RELATORIO_TEMPLATE.md   # Template para relatório
-```
+## Exercícios
+Consulte o arquivo `RevisaoPonteiros.md` para descrições completas dos exercícios.
 
 ## Compilação
 ```bash
-# Compilar exercícios (apos resolucao)
-gcc -pthread src/ex1_contador_mutex.c -o ex1
-gcc -pthread src/ex2_pedidos_prodcons.c -o ex2
-gcc -pthread src/ex3_cache_leitores_escritores.c -o ex3
+# Compilar exercícios (após resolução)
+gcc src/ex1_swap.c -o ex1
+gcc src/ex2_strcpy.c -o ex2
+gcc src/ex3_vetordinamico.c -o ex3
+gcc src/ex4_matrizdinamica.c -o ex4
+gcc src/ex5_listaligada.c -o ex5
 
 # Executar
 ./ex1
 ./ex2
 ./ex3
+./ex4
+./ex5
 ```
+
+## Conceitos Importantes
+
+### Ponteiros Básicos
+- **Declaração**: `int *ptr;` - ponteiro para inteiro
+- **Endereço**: `&variavel` - obtém o endereço de uma variável
+- **Desreferenciação**: `*ptr` - acessa o valor apontado
+- **NULL**: ponteiro que não aponta para nada válido
+
+### Aritmética de Ponteiros
+- `ptr + 1` avança para o próximo elemento (não necessariamente +1 byte)
+- `ptr++` incrementa o ponteiro
+- `ptr - outro_ptr` calcula distância entre ponteiros
+- Funciona automaticamente com o tipo do ponteiro
+
+### Ponteiros e Arrays
+- Nome do array é um ponteiro para o primeiro elemento
+- `arr[i]` é equivalente a `*(arr + i)`
+- Pode-se usar aritmética de ponteiros para navegar arrays
+
+### Ponteiros e Strings
+- Strings em C são arrays de `char` terminados com `'\0'`
+- `const char *str` - ponteiro para string constante
+- Strings literais não devem ser modificadas
+
+### Alocação Dinâmica
+- `malloc(tamanho)` - aloca memória na heap
+- `free(ptr)` - libera memória alocada
+- Sempre verificar se `malloc` retornou `NULL`
+- Sempre liberar memória alocada (evitar memory leak)
+
+### Ponteiros para Ponteiros
+- `int **pptr` - ponteiro para ponteiro
+- Usado para matrizes dinâmicas e funções que modificam ponteiros
+- Requer desreferenciação dupla: `**pptr`
 
 ## Dicas Importantes
 
-### Mutex
-- Sempre destravar após travar: `pthread_mutex_lock()` → seção crítica → `pthread_mutex_unlock()`
-- Evite esquecer de destravar em caminhos de erro
-- Inicialize com `pthread_mutex_init()` ou `PTHREAD_MUTEX_INITIALIZER`
+### Erros Comuns
+- **Ponteiro não inicializado**: sempre inicialize ponteiros ou use NULL
+- **Dangling pointer**: não use ponteiro após `free()`
+- **Memory leak**: sempre libere memória alocada
+- **Buffer overflow**: respeite limites de arrays
+- **Esquecer `\0`**: strings devem terminar com caractere nulo
 
-### Variáveis de Condição
-- Use sempre com mutex associado
-- Espera em loop: `while(condição) pthread_cond_wait(&cond, &mutex)`
-- `signal` acorda uma thread, `broadcast` acorda todas
+### Boas Práticas
+- Sempre verificar retorno de `malloc()`
+- Inicializar ponteiros com `NULL` se não tiverem valor inicial
+- Liberar memória na ordem inversa da alocação
+- Usar `const` para ponteiros que não devem modificar dados
+- Evitar aritmética de ponteiros complexa quando índices são mais claros
 
-### Semáforos
-- `sem_wait()` decrementa (bloqueia se 0)
-- `sem_post()` incrementa (libera threads esperando)
-- Útil para controlar número de recursos disponíveis
+### Debugging
+- Use `printf` com `%p` para imprimir endereços
+- Compile com `-g` e use `gdb` para debugar
+- Use `valgrind` para detectar problemas de memória:
+  ```bash
+  gcc -g src/ex5_matriz_ponteiros.c -o ex5
+  valgrind --leak-check=full ./ex5
+  ```
 
-## Exercícios
-1. **Contador com Mutex**: Sistema de likes em rede social
-2. **Produtor-Consumidor**: Processamento de pedidos online
-3. **Leitores-Escritores**: Cache de dados compartilhado
-
-Consulte `EXERCICIOS.md` para descrições completas.
+## Material de Referência
+- `RevisaoPonteiros.pdf` - slides da aula
+- `docs/sync_reference.md` - referência rápida
+- Manual do C: `man malloc`, `man free`, `man string.h`
