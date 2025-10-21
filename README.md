@@ -1,96 +1,269 @@
-# Lab 5: Revisão de Ponteiros
+# Lab 6: Depuração e Análise de Vazamento de Memória
+
+**Disciplina**: Sistemas Operacionais
+**Professor**: Lucas Cerqueira Figueiredo
+**Semestre**: 1º/2025
 
 ## Visão Geral
-Laboratório focado em conceitos fundamentais de **ponteiros em C**: manipulação de memória, aritmética de ponteiros, alocação dinâmica e passagem por referência.
+
+Laboratório focado no uso de ferramentas de depuração e análise de vazamento de memória em programas C, com ênfase no **Valgrind**. Este laboratório é essencial para desenvolver habilidades de detecção e correção de problemas de memória, críticos no contexto de sistemas operacionais.
 
 ## Objetivos
-- Entender o conceito de ponteiros e endereços de memória
-- Praticar aritmética de ponteiros e manipulação de arrays
-- Implementar funções usando passagem por referência
-- Trabalhar com alocação dinâmica de memória (malloc/free)
-- Manipular strings usando ponteiros
 
-## Exercícios
-Consulte o arquivo `RevisaoPonteiros.pdf` para descrições completas dos exercícios.
+- Compreender os principais problemas de memória em C (vazamentos, acessos inválidos, etc.)
+- Aprender a usar o Valgrind para detecção de problemas de memória
+- Interpretar relatórios do Valgrind
+- Corrigir problemas de gerenciamento de memória
+- Relacionar estes conceitos com o contexto de sistemas operacionais
 
-## Compilação
+## Material de Estudo
+
+Consulte os seguintes arquivos para o conteúdo teórico completo:
+- `LISTA_DEPURACAO.pdf` - Documento principal com teoria e exercícios
+- `depuracao.tex` - Fonte LaTeX do documento (opcional)
+
+## Fundamentos
+
+### Problemas Comuns de Memória
+
+1. **Vazamento de Memória (Memory Leak)**: Memória alocada mas não liberada
+2. **Acesso Inválido (Invalid Access)**: Leitura/escrita fora dos limites
+3. **Liberação Dupla (Double Free)**: Liberar a mesma memória mais de uma vez
+4. **Uso Após Liberação (Use-After-Free)**: Usar memória já liberada
+5. **Uso de Variáveis Não Inicializadas**: Usar valores sem inicialização
+
+### Valgrind - Uso Básico
+
 ```bash
-# Compilar exercícios (após resolução)
-gcc src/ex1_swap.c -o ex1
-gcc src/ex2_strcpy.c -o ex2
-gcc src/ex3_vetordinamico.c -o ex3
-gcc src/ex4_matrizdinamica.c -o ex4
-gcc src/ex5_listaligada.c -o ex5
+# Compilar com flags de depuração
+gcc -g programa.c -o programa
 
-# Executar
-./ex1
-./ex2
-./ex3
-./ex4
-./ex5
+# Executar com Valgrind
+valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./programa
 ```
 
-## Conceitos Importantes
+**Principais opções**:
+- `--leak-check=full`: Detalhamento completo dos vazamentos
+- `--show-leak-kinds=all`: Mostra todos os tipos de vazamento
+- `--track-origins=yes`: Rastreia a origem de valores não inicializados
 
-### Ponteiros Básicos
-- **Declaração**: `int *ptr;` - ponteiro para inteiro
-- **Endereço**: `&variavel` - obtém o endereço de uma variável
-- **Desreferenciação**: `*ptr` - acessa o valor apontado
-- **NULL**: ponteiro que não aponta para nada válido
+## Estrutura do Repositório
 
-### Aritmética de Ponteiros
-- `ptr + 1` avança para o próximo elemento (não necessariamente +1 byte)
-- `ptr++` incrementa o ponteiro
-- `ptr - outro_ptr` calcula distância entre ponteiros
-- Funciona automaticamente com o tipo do ponteiro
+```
+lab6-depuracao/
+├── README.md                      # Este arquivo
+├── LISTA_DEPURACAO.pdf           # Material teórico completo
+├── depuracao.tex                  # Fonte LaTeX
+├── .gitignore                     # Arquivos a ignorar
+└── exercicios/
+    ├── ex1_memory_leak/
+    │   ├── original.c             # Código com problema
+    │   ├── corrigido.c            # Código corrigido (sua solução)
+    │   ├── valgrind_original.txt  # Saída do Valgrind (código original)
+    │   └── valgrind_corrigido.txt # Saída do Valgrind (código corrigido)
+    ├── ex2_uninitialized/
+    │   ├── original.c
+    │   ├── corrigido.c
+    │   ├── valgrind_original.txt
+    │   └── valgrind_corrigido.txt
+    ├── ex3_buffer_overflow/
+    │   ├── original.c
+    │   ├── corrigido.c
+    │   ├── valgrind_original.txt
+    │   └── valgrind_corrigido.txt
+    ├── ex4_double_free/
+    │   ├── original.c
+    │   ├── corrigido.c
+    │   ├── valgrind_original.txt
+    │   └── valgrind_corrigido.txt
+    ├── ex5_use_after_free/
+    │   ├── original.c
+    │   ├── corrigido.c
+    │   ├── valgrind_original.txt
+    │   └── valgrind_corrigido.txt
+    └── ex6_linked_list/
+        ├── original.c
+        ├── corrigido.c
+        ├── valgrind_original.txt
+        └── valgrind_corrigido.txt
+```
 
-### Ponteiros e Arrays
-- Nome do array é um ponteiro para o primeiro elemento
-- `arr[i]` é equivalente a `*(arr + i)`
-- Pode-se usar aritmética de ponteiros para navegar arrays
+## Exercícios
 
-### Ponteiros e Strings
-- Strings em C são arrays de `char` terminados com `'\0'`
-- `const char *str` - ponteiro para string constante
-- Strings literais não devem ser modificadas
+### Exercício 1: Vazamento de Memória
+**Problema**: Função aloca memória mas não a libera
+**Contexto SO**: Similar a drivers de dispositivo que não liberam memória de operações de E/S
 
-### Alocação Dinâmica
-- `malloc(tamanho)` - aloca memória na heap
-- `free(ptr)` - libera memória alocada
-- Sempre verificar se `malloc` retornou `NULL`
-- Sempre liberar memória alocada (evitar memory leak)
+### Exercício 2: Memória Não Inicializada
+**Problema**: Uso de valores em array não inicializado
+**Contexto SO**: Pode revelar dados de outros processos (violação de segurança)
 
-### Ponteiros para Ponteiros
-- `int **pptr` - ponteiro para ponteiro
-- Usado para matrizes dinâmicas e funções que modificam ponteiros
-- Requer desreferenciação dupla: `**pptr`
+### Exercício 3: Buffer Overflow
+**Problema**: Acesso fora dos limites do array alocado
+**Contexto SO**: Vulnerabilidade comum que pode levar a exploits
 
-## Dicas Importantes
+### Exercício 4: Liberação Dupla
+**Problema**: Tentativa de liberar a mesma memória duas vezes
+**Contexto SO**: Pode corromper estruturas do gerenciador de memória
 
-### Erros Comuns
-- **Ponteiro não inicializado**: sempre inicialize ponteiros ou use NULL
-- **Dangling pointer**: não use ponteiro após `free()`
-- **Memory leak**: sempre libere memória alocada
-- **Buffer overflow**: respeite limites de arrays
-- **Esquecer `\0`**: strings devem terminar com caractere nulo
+### Exercício 5: Use-After-Free
+**Problema**: Uso de ponteiro após a memória ter sido liberada
+**Contexto SO**: Comum em drivers e pode causar comportamentos imprevisíveis
 
-### Boas Práticas
-- Sempre verificar retorno de `malloc()`
-- Inicializar ponteiros com `NULL` se não tiverem valor inicial
-- Liberar memória na ordem inversa da alocação
-- Usar `const` para ponteiros que não devem modificar dados
-- Evitar aritmética de ponteiros complexa quando índices são mais claros
+### Exercício 6: Lista Ligada
+**Problema**: Implementar função para liberar corretamente toda uma lista ligada
+**Contexto SO**: Estruturas fundamentais em kernels (tabelas de processos, filas de E/S)
 
-### Debugging
-- Use `printf` com `%p` para imprimir endereços
-- Compile com `-g` e use `gdb` para debugar
-- Use `valgrind` para detectar problemas de memória:
-  ```bash
-  gcc -g src/ex5_matriz_ponteiros.c -o ex5
-  valgrind --leak-check=full ./ex5
-  ```
+## Workflow de Resolução
 
-## Material de Referência
-- `RevisaoPonteiros.pdf` - slides da aula
-- `docs/sync_reference.md` - referência rápida
-- Manual do C: `man malloc`, `man free`, `man string.h`
+Para cada exercício, siga este workflow:
+
+### 1. Analisar o Código Original
+```bash
+cd exercicios/ex1_memory_leak
+cat original.c
+```
+
+### 2. Compilar e Executar com Valgrind
+```bash
+gcc -g original.c -o original
+valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./original > valgrind_original.txt 2>&1
+```
+
+### 3. Analisar o Relatório
+```bash
+cat valgrind_original.txt
+# Identifique: quantos bytes vazados? em quantos blocos? qual linha do código?
+```
+
+### 4. Corrigir o Código
+```bash
+# Copie original.c para corrigido.c e faça as correções
+cp original.c corrigido.c
+nano corrigido.c  # ou seu editor preferido
+```
+
+### 5. Verificar a Correção
+```bash
+gcc -g corrigido.c -o corrigido
+valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./corrigido > valgrind_corrigido.txt 2>&1
+cat valgrind_corrigido.txt
+# Verifique: "All heap blocks were freed -- no leaks are possible"
+```
+
+### 6. Fazer Commit das Alterações
+```bash
+git add exercicios/ex1_memory_leak/
+git commit -m "Resolve exercício 1: corrige vazamento de memória"
+```
+
+## Entrega via GitHub
+
+### Formato de Entrega
+
+**IMPORTANTE**: A entrega deste laboratório é feita exclusivamente via GitHub.
+
+Para cada exercício, você deve incluir no repositório:
+1. `original.c` - Código fornecido com o problema
+2. `corrigido.c` - Sua solução corrigida
+3. `valgrind_original.txt` - Saída completa do Valgrind para o código original
+4. `valgrind_corrigido.txt` - Saída completa do Valgrind para o código corrigido
+
+### Instruções de Entrega
+
+1. **Clone o repositório** (se ainda não fez):
+   ```bash
+   git clone <url-do-repositorio>
+   cd lab6-depuracao
+   ```
+
+2. **Crie a branch de trabalho** (já criada automaticamente):
+   ```bash
+   git checkout claude/review-lab-files-011CUKRrxRw8CJFWRQa4eJUj
+   ```
+
+3. **Resolva os exercícios** seguindo o workflow descrito acima
+
+4. **Faça commits incrementais**:
+   ```bash
+   # Após completar cada exercício
+   git add exercicios/ex1_memory_leak/
+   git commit -m "Resolve exercício 1: vazamento de memória"
+
+   git add exercicios/ex2_uninitialized/
+   git commit -m "Resolve exercício 2: memória não inicializada"
+   # ... e assim por diante
+   ```
+
+5. **Push para o GitHub**:
+   ```bash
+   git push -u origin claude/review-lab-files-011CUKRrxRw8CJFWRQa4eJUj
+   ```
+
+6. **Verificação Final**: Acesse o GitHub e confirme que todos os arquivos foram enviados corretamente
+
+### Critérios de Avaliação
+
+- **Correção do código** (50%): Os problemas foram corrigidos adequadamente?
+- **Relatórios do Valgrind** (30%): Os arquivos .txt estão completos e corretos?
+- **Boas práticas** (10%): O código segue as melhores práticas apresentadas?
+- **Commits organizados** (10%): Os commits são claros e bem estruturados?
+
+### Dicas Importantes
+
+- Sempre compile com `-g` para obter informações de debug
+- Leia **toda** a saída do Valgrind, não apenas o sumário
+- Para cada `malloc()` deve haver um `free()` correspondente
+- Após `free(ptr)`, faça `ptr = NULL` para evitar uso acidental
+- Verifique limites de arrays antes de acessá-los
+- Sempre inicialize variáveis antes de usá-las
+
+## Boas Práticas de Gerenciamento de Memória
+
+1. **Sempre inicialize variáveis** antes de usá-las
+2. **Para cada malloc(), deve haver um free()** correspondente
+3. **Verifique o retorno de malloc()** para garantir sucesso na alocação
+4. **Use NULL após liberar**:
+   ```c
+   free(ptr);
+   ptr = NULL;
+   ```
+5. **Verifique os limites de arrays** antes de acessá-los
+6. **Compile com flags de depuração** (`-g`) para relatórios detalhados
+
+## Interpretando a Saída do Valgrind
+
+### Tipos de Vazamento
+
+- **Definitivamente perdido**: Memória não liberada e sem referência (ERRO GRAVE)
+- **Indiretamente perdido**: Perdido devido a outro vazamento
+- **Possivelmente perdido**: Valgrind não tem certeza se há referência
+- **Ainda acessível**: Memória não liberada, mas ainda referenciada
+
+### Exemplo de Saída Ideal
+
+```
+==12345== HEAP SUMMARY:
+==12345==     in use at exit: 0 bytes in 0 blocks
+==12345==   total heap usage: 5 allocs, 5 frees, 200 bytes allocated
+==12345==
+==12345== All heap blocks were freed -- no leaks are possible
+```
+
+## Recursos Adicionais
+
+- [Documentação oficial do Valgrind](http://valgrind.org/)
+- TANENBAUM, A. S. *Sistemas Operacionais Modernos*. 3ª ed. Pearson, 2010
+- SILBERSCHATZ, A., GALVIN, P.B, GAGNE, G. *Fundamentos de Sistemas Operacionais*. 8ª ed. LTC, 2010
+- ARPACI-DUSSEAU, R. H.; ARPACI-DUSSEAU, A. C. *Operating Systems: Three Easy Pieces*
+
+## Prazo de Entrega
+
+Consulte o Moodle para a data limite de entrega.
+
+## Dúvidas
+
+Em caso de dúvidas:
+1. Consulte o PDF `LISTA_DEPURACAO.pdf`
+2. Revise os exemplos de saída do Valgrind
+3. Entre em contato com o professor via Moodle
