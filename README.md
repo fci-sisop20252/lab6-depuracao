@@ -2,24 +2,44 @@
 
 **Disciplina**: Sistemas Operacionais
 **Professor**: Lucas Cerqueira Figueiredo
-**Semestre**: 1º/2025
+**Semestre**: 2º/2025
 
 ## Visão Geral
 
 Laboratório focado no uso de ferramentas de depuração e análise de vazamento de memória em programas C, com ênfase no **Valgrind**. Este laboratório é essencial para desenvolver habilidades de detecção e correção de problemas de memória, críticos no contexto de sistemas operacionais.
 
+## Ambiente de Desenvolvimento
+
+**IMPORTANTE**: Este laboratório deve ser realizado utilizando o **GitHub Codespaces**, que fornece um ambiente de desenvolvimento completo na nuvem, com todas as ferramentas necessárias (gcc, Valgrind, git) já instaladas e configuradas.
+
+### Como acessar o Codespaces
+
+1. Acesse seu repositório no GitHub
+2. Clique em **Code** > **Codespaces** > **Create codespace on main**
+3. Aguarde a inicialização do ambiente (pode levar alguns minutos na primeira vez)
+4. Use o terminal integrado para compilar e executar os programas
+5. Faça commits e push diretamente do Codespaces
+
+**Não é necessário instalar nada localmente!**
+
 ## Objetivos
 
 - Compreender os principais problemas de memória em C (vazamentos, acessos inválidos, etc.)
+
 - Aprender a usar o Valgrind para detecção de problemas de memória
+
 - Interpretar relatórios do Valgrind
+
 - Corrigir problemas de gerenciamento de memória
+
 - Relacionar estes conceitos com o contexto de sistemas operacionais
 
 ## Material de Estudo
 
 Consulte os seguintes arquivos para o conteúdo teórico completo:
+
 - `LISTA_DEPURACAO.pdf` - Documento principal com teoria e exercícios
+
 - `depuracao.tex` - Fonte LaTeX do documento (opcional)
 
 ## Fundamentos
@@ -27,12 +47,18 @@ Consulte os seguintes arquivos para o conteúdo teórico completo:
 ### Problemas Comuns de Memória
 
 1. **Vazamento de Memória (Memory Leak)**: Memória alocada mas não liberada
+
 2. **Acesso Inválido (Invalid Access)**: Leitura/escrita fora dos limites
+
 3. **Liberação Dupla (Double Free)**: Liberar a mesma memória mais de uma vez
+
 4. **Uso Após Liberação (Use-After-Free)**: Usar memória já liberada
+
 5. **Uso de Variáveis Não Inicializadas**: Usar valores sem inicialização
 
 ### Valgrind - Uso Básico
+
+No GitHub Codespaces, o Valgrind já está instalado e pronto para uso. Para utilizá-lo:
 
 ```bash
 # Compilar com flags de depuração
@@ -43,8 +69,11 @@ valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./programa
 ```
 
 **Principais opções**:
+
 - `--leak-check=full`: Detalhamento completo dos vazamentos
+
 - `--show-leak-kinds=all`: Mostra todos os tipos de vazamento
+
 - `--track-origins=yes`: Rastreia a origem de valores não inicializados
 
 ## Estrutura do Repositório
@@ -91,27 +120,39 @@ lab6-depuracao/
 ## Exercícios
 
 ### Exercício 1: Vazamento de Memória
+
 **Problema**: Função aloca memória mas não a libera
+
 **Contexto SO**: Similar a drivers de dispositivo que não liberam memória de operações de E/S
 
 ### Exercício 2: Memória Não Inicializada
+
 **Problema**: Uso de valores em array não inicializado
+
 **Contexto SO**: Pode revelar dados de outros processos (violação de segurança)
 
 ### Exercício 3: Buffer Overflow
+
 **Problema**: Acesso fora dos limites do array alocado
+
 **Contexto SO**: Vulnerabilidade comum que pode levar a exploits
 
 ### Exercício 4: Liberação Dupla
+
 **Problema**: Tentativa de liberar a mesma memória duas vezes
+
 **Contexto SO**: Pode corromper estruturas do gerenciador de memória
 
 ### Exercício 5: Use-After-Free
+
 **Problema**: Uso de ponteiro após a memória ter sido liberada
+
 **Contexto SO**: Comum em drivers e pode causar comportamentos imprevisíveis
 
 ### Exercício 6: Lista Ligada
+
 **Problema**: Implementar função para liberar corretamente toda uma lista ligada
+
 **Contexto SO**: Estruturas fundamentais em kernels (tabelas de processos, filas de E/S)
 
 ## Workflow de Resolução
@@ -171,15 +212,14 @@ Para cada exercício, você deve incluir no repositório:
 
 ### Instruções de Entrega
 
-1. **Clone o repositório** (se ainda não fez):
-   ```bash
-   git clone <url-do-repositorio>
-   cd lab6-depuracao
-   ```
+1. **Abra o GitHub Codespaces**:
+   - Acesse seu repositório no GitHub
+   - Clique em **Code** > **Codespaces** > **Create codespace on main**
+   - O ambiente será configurado automaticamente
 
-2. **Crie a branch de trabalho** (já criada automaticamente):
+2. **Verifique a branch de trabalho** (normalmente você já estará na branch correta):
    ```bash
-   git checkout claude/review-lab-files-011CUKRrxRw8CJFWRQa4eJUj
+   git branch  # Verifica em qual branch você está
    ```
 
 3. **Resolva os exercícios** seguindo o workflow descrito acima
@@ -197,38 +237,41 @@ Para cada exercício, você deve incluir no repositório:
 
 5. **Push para o GitHub**:
    ```bash
-   git push -u origin claude/review-lab-files-011CUKRrxRw8CJFWRQa4eJUj
+   git push
    ```
 
 6. **Verificação Final**: Acesse o GitHub e confirme que todos os arquivos foram enviados corretamente
 
-### Critérios de Avaliação
-
-- **Correção do código** (50%): Os problemas foram corrigidos adequadamente?
-- **Relatórios do Valgrind** (30%): Os arquivos .txt estão completos e corretos?
-- **Boas práticas** (10%): O código segue as melhores práticas apresentadas?
-- **Commits organizados** (10%): Os commits são claros e bem estruturados?
-
 ### Dicas Importantes
 
 - Sempre compile com `-g` para obter informações de debug
+
 - Leia **toda** a saída do Valgrind, não apenas o sumário
+
 - Para cada `malloc()` deve haver um `free()` correspondente
+
 - Após `free(ptr)`, faça `ptr = NULL` para evitar uso acidental
+
 - Verifique limites de arrays antes de acessá-los
+
 - Sempre inicialize variáveis antes de usá-las
 
 ## Boas Práticas de Gerenciamento de Memória
 
 1. **Sempre inicialize variáveis** antes de usá-las
+
 2. **Para cada malloc(), deve haver um free()** correspondente
+
 3. **Verifique o retorno de malloc()** para garantir sucesso na alocação
+
 4. **Use NULL após liberar**:
    ```c
    free(ptr);
    ptr = NULL;
    ```
+
 5. **Verifique os limites de arrays** antes de acessá-los
+
 6. **Compile com flags de depuração** (`-g`) para relatórios detalhados
 
 ## Interpretando a Saída do Valgrind
@@ -236,8 +279,11 @@ Para cada exercício, você deve incluir no repositório:
 ### Tipos de Vazamento
 
 - **Definitivamente perdido**: Memória não liberada e sem referência (ERRO GRAVE)
+
 - **Indiretamente perdido**: Perdido devido a outro vazamento
+
 - **Possivelmente perdido**: Valgrind não tem certeza se há referência
+
 - **Ainda acessível**: Memória não liberada, mas ainda referenciada
 
 ### Exemplo de Saída Ideal
@@ -253,17 +299,19 @@ Para cada exercício, você deve incluir no repositório:
 ## Recursos Adicionais
 
 - [Documentação oficial do Valgrind](http://valgrind.org/)
+
 - TANENBAUM, A. S. *Sistemas Operacionais Modernos*. 3ª ed. Pearson, 2010
+
 - SILBERSCHATZ, A., GALVIN, P.B, GAGNE, G. *Fundamentos de Sistemas Operacionais*. 8ª ed. LTC, 2010
+
 - ARPACI-DUSSEAU, R. H.; ARPACI-DUSSEAU, A. C. *Operating Systems: Three Easy Pieces*
-
-## Prazo de Entrega
-
-Consulte o Moodle para a data limite de entrega.
 
 ## Dúvidas
 
 Em caso de dúvidas:
+
 1. Consulte o PDF `LISTA_DEPURACAO.pdf`
+
 2. Revise os exemplos de saída do Valgrind
-3. Entre em contato com o professor via Moodle
+
+3. Entre em contato com o professor

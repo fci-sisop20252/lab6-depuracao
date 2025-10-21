@@ -108,7 +108,7 @@
 }
 
 \author{{\large Prof. Lucas Cerqueira Figueiredo}}
-\date{{\large 1º Semestre de 2025}}
+\date{{\large 2º Semestre de 2025}}
 
 \begin{document}
 
@@ -506,28 +506,51 @@ int main() {
     \item \textbf{Compile com flags de depuração} (-g) para obter relatórios mais detalhados
 \end{enumerate}
 
-\section{Entrega}
+\section{Entrega via GitHub}
 
-Para cada exercício, entregue:
+\textbf{IMPORTANTE}: A entrega deste laboratório é feita exclusivamente via GitHub. Utilize o GitHub Codespaces para realizar os exercícios, eliminando a necessidade de configuração local do ambiente.
+
+Para cada exercício, você deve incluir no repositório:
 \begin{enumerate}
-    \item O código corrigido (arquivo .c)
-    \item A saída do Valgrind para o código original (arquivo .txt)
-    \item A saída do Valgrind para o código corrigido (arquivo .txt)
+    \item \texttt{original.c} - Código fornecido com o problema
+    \item \texttt{corrigido.c} - Sua solução corrigida
+    \item \texttt{valgrind\_original.txt} - Saída completa do Valgrind para o código original
+    \item \texttt{valgrind\_corrigido.txt} - Saída completa do Valgrind para o código corrigido
 \end{enumerate}
 
-\begin{tcolorbox}[colback=lightblue!20, colframe=mackblue, title=\emoji{light-bulb} Formato de Entrega]
-Organize os arquivos da seguinte forma:
+\begin{tcolorbox}[colback=lightblue!20, colframe=mackblue, title=\emoji{light-bulb} Estrutura do Repositório]
+Os exercícios estão organizados na seguinte estrutura:
 \begin{verbatim}
-lab_valgrind_RAdoAluno/
-  |-- exercicio1/
-  |     |-- corrigido.c
-  |     |-- valgrind_original.txt
-  |     |-- valgrind_corrigido.txt
-  |-- exercicio2/
-  |     |-- ...
+lab6-depuracao/
+├── exercicios/
+│   ├── ex1_memory_leak/
+│   │   ├── original.c
+│   │   ├── corrigido.c
+│   │   ├── valgrind_original.txt
+│   │   └── valgrind_corrigido.txt
+│   ├── ex2_uninitialized/
+│   │   └── ...
+│   └── ex6_linked_list/
+│       └── ...
 \end{verbatim}
-Compacte a pasta e envie pelo Moodle até a data limite.
+
+Complete os exercícios, faça commits incrementais e push para o GitHub.
+Consulte o README.md para instruções detalhadas do workflow.
 \end{tcolorbox}
+
+\subsection{Usando o GitHub Codespaces}
+
+O GitHub Codespaces fornece um ambiente de desenvolvimento completo na nuvem, com todas as ferramentas necessárias (gcc, Valgrind) já instaladas:
+
+\begin{enumerate}
+    \item Acesse seu repositório no GitHub
+    \item Clique em \textbf{Code} > \textbf{Codespaces} > \textbf{Create codespace on main}
+    \item Aguarde a inicialização do ambiente
+    \item Use o terminal integrado para compilar e executar os programas
+    \item Faça commits e push diretamente do Codespaces
+\end{enumerate}
+
+Não é necessário instalar nada localmente!
 
 \section{Bibliografia Recomendada}
 
