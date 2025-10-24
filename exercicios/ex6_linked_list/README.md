@@ -22,13 +22,5 @@ gcc -g corrigido.c -o corrigido
 valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./corrigido > valgrind_corrigido.txt 2>&1
 ```
 
-## Dica
-Cuidado ao liberar nós! Você precisa salvar o ponteiro para o próximo nó ANTES de liberar o nó atual:
-```c
-Node* temp = current->next;  // Salva o próximo
-free(current);                // Libera o atual
-current = temp;               // Avança para o próximo
-```
-
 ## Desafio Adicional
 Modifique o programa para aceitar entrada do usuário para o tamanho da lista e teste com valores diferentes (ex: 0, 1, 100, 1000).

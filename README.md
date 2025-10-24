@@ -38,9 +38,7 @@ Laboratório focado no uso de ferramentas de depuração e análise de vazamento
 
 Consulte os seguintes arquivos para o conteúdo teórico completo:
 
-- `LISTA_DEPURACAO.pdf` - Documento principal com teoria e exercícios
-
-- `depuracao.tex` - Fonte LaTeX do documento (opcional)
+- `LISTA_DEPURACAO.pdf` - Documento principal com breve teoria e exercícios
 
 ## Fundamentos
 

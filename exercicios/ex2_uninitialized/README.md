@@ -20,6 +20,3 @@ valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./original 
 gcc -g corrigido.c -o corrigido
 valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./corrigido > valgrind_corrigido.txt 2>&1
 ```
-
-## Dica
-Sempre inicialize variáveis antes de usá-las! Você pode usar um loop ou `memset()`.

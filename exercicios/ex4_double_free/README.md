@@ -20,11 +20,3 @@ valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./original 
 gcc -g corrigido.c -o corrigido
 valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./corrigido > valgrind_corrigido.txt 2>&1
 ```
-
-## Dica
-Após liberar um ponteiro, defina-o como NULL:
-```c
-free(ptr);
-ptr = NULL;
-```
-Isso evita uso acidental após liberação.

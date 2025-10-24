@@ -20,6 +20,3 @@ valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./original 
 gcc -g corrigido.c -o corrigido
 valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./corrigido > valgrind_corrigido.txt 2>&1
 ```
-
-## Dica
-Cuidado com condições `<=` vs `<` em loops! Se o array tem tamanho 5, os índices válidos são 0 a 4.
